@@ -6,9 +6,14 @@ const Products = require("./db/product")
 const app = express()
 const jwt = require("jsonwebtoken")
 const jwtKey = "random123"
+const path = require("path")
 
 app.use(cors())
 app.use(express.json())
+
+app.listen(5000, (req, res) => {
+    console.log("server is working........")
+})
 
 app.post("/register", async (req, res) => {
     let user = new Users(req.body)
@@ -123,9 +128,7 @@ function verifyToken(req, res, next) {
     }
 }
 
-app.listen(5000, (req, res) => {
-    console.log("server is working........")
-})
+
 
 // const express = require("express")
 // const app = express()
@@ -139,3 +142,9 @@ app.listen(5000, (req, res) => {
 //     console.log("server is working........")
 // })
 
+const __dirname = path.resolve()
+
+app.use(express.static(path.join(__dirname, "./frontend/build")))
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "./frontend/build/index.html"))
+})
